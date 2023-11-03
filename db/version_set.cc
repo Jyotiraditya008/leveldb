@@ -87,7 +87,7 @@ Version::~Version() {
 int FindFile(const InternalKeyComparator& icmp,
              const std::vector<FileMetaData*>& files, const Slice& key) {
   uint32_t left = 0;
-  uint32_t right = files.size();
+  uint32_t right = (uint32_t)files.size();
   while (left < right) {
     uint32_t mid = (left + right) / 2;
     const FileMetaData* f = files[mid];
@@ -164,7 +164,7 @@ class Version::LevelFileNumIterator : public Iterator {
  public:
   LevelFileNumIterator(const InternalKeyComparator& icmp,
                        const std::vector<FileMetaData*>* flist)
-      : icmp_(icmp), flist_(flist), index_(flist->size()) {  // Marks as invalid
+      : icmp_(icmp), flist_(flist), index_((uint32_t)flist->size()) {  // Marks as invalid
   }
   bool Valid() const override { return index_ < flist_->size(); }
   void Seek(const Slice& target) override {
@@ -172,7 +172,7 @@ class Version::LevelFileNumIterator : public Iterator {
   }
   void SeekToFirst() override { index_ = 0; }
   void SeekToLast() override {
-    index_ = flist_->empty() ? 0 : flist_->size() - 1;
+    index_ = flist_->empty() ? 0 : (uint32_t)flist_->size() - 1;
   }
   void Next() override {
     assert(Valid());
@@ -181,7 +181,7 @@ class Version::LevelFileNumIterator : public Iterator {
   void Prev() override {
     assert(Valid());
     if (index_ == 0) {
-      index_ = flist_->size();  // Marks as invalid
+      index_ = (uint32_t)flist_->size();  // Marks as invalid
     } else {
       index_--;
     }
@@ -1094,7 +1094,7 @@ Status VersionSet::WriteSnapshot(log::Writer* log) {
 int VersionSet::NumLevelFiles(int level) const {
   assert(level >= 0);
   assert(level < config::kNumLevels);
-  return current_->files_[level].size();
+  return (uint32_t)current_->files_[level].size();
 }
 
 const char* VersionSet::LevelSummary(LevelSummaryStorage* scratch) const {
@@ -1219,7 +1219,7 @@ Iterator* VersionSet::MakeInputIterator(Compaction* c) {
   // Level-0 files have to be merged together.  For other levels,
   // we will make a concatenating iterator per level.
   // TODO(opt): use concatenating iterator for level-0 if there is no overlap
-  const int space = (c->level() == 0 ? c->inputs_[0].size() + 1 : 2);
+  const int space = (c->level() == 0 ? (uint32_t)c->inputs_[0].size() + 1 : 2);
   Iterator** list = new Iterator*[space];
   int num = 0;
   for (int which = 0; which < 2; which++) {

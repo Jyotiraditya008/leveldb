@@ -38,7 +38,7 @@ int MemTable::KeyComparator::operator()(const char* aptr,
 // into this scratch space.
 static const char* EncodeKey(std::string* scratch, const Slice& target) {
   scratch->clear();
-  PutVarint32(scratch, target.size());
+  PutVarint32(scratch, (uint32_t)target.size());
   scratch->append(target.data(), target.size());
   return scratch->data();
 }
@@ -87,12 +87,12 @@ void MemTable::Add(SequenceNumber s, ValueType type, const Slice& key,
                              internal_key_size + VarintLength(val_size) +
                              val_size;
   char* buf = arena_.Allocate(encoded_len);
-  char* p = EncodeVarint32(buf, internal_key_size);
+  char* p = EncodeVarint32(buf, (uint32_t)internal_key_size);
   std::memcpy(p, key.data(), key_size);
   p += key_size;
   EncodeFixed64(p, (s << 8) | type);
   p += 8;
-  p = EncodeVarint32(p, val_size);
+  p = EncodeVarint32(p, (uint32_t)val_size);
   std::memcpy(p, value.data(), val_size);
   assert(p + val_size == buf + encoded_len);
   table_.Insert(buf);

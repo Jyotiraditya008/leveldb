@@ -765,7 +765,7 @@ int MaxOpenFiles() {
     g_open_read_only_file_limit = std::numeric_limits<int>::max();
   } else {
     // Allow use of 20% of available file descriptors for read-only files.
-    g_open_read_only_file_limit = rlim.rlim_cur / 5;
+    g_open_read_only_file_limit = (uint32_t)rlim.rlim_cur / 5;
   }
   return g_open_read_only_file_limit;
 }
