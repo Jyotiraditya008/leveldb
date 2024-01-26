@@ -11,3 +11,14 @@ jobs:
     - uses: actions/checkout@v2
     - name: Build
       run: swift build
+
+  cocoapods:
+      strategy:
+          matrix:
+            platform: [ios]
+            # platform: [ios, tvos, macos, watchos]
+      runs-on: macOS-latest
+      steps:
+      - uses: actions/checkout@v2
+      - name: Build
+        run: pod lib lint leveldb-library.podspec --platforms=${{ matrix.platform }}  --no-clean --skip-import-validation
