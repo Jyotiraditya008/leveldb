@@ -15,8 +15,7 @@ jobs:
   cocoapods:
       strategy:
           matrix:
-            platform: [ios]
-            # platform: [ios, tvos, macos, watchos]
+            platform: [ios, tvos, macos, watchos]
       runs-on: macOS-latest
       steps:
       - uses: actions/checkout@v2
