@@ -20,4 +20,7 @@ jobs:
       steps:
       - uses: actions/checkout@v2
       - name: Build
-        run: pod lib lint leveldb-library.podspec --platforms=${{ matrix.platform }}  --no-clean --skip-import-validation
+        # Some header files import C++ headers, which causes linting failures
+        # (https://github.com/CocoaPods/CocoaPods/issues/5152). As a
+        # workaround, the `--skip-import-validation` is used.
+        run: pod lib lint leveldb-library.podspec --platforms=${{ matrix.platform }} --skip-import-validation
