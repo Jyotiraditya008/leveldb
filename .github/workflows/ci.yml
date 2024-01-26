@@ -9,7 +9,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  swift-build-run:
+  spm:
     runs-on: macOS-latest
     steps:
     - uses: actions/checkout@v2
