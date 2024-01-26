@@ -12,7 +12,7 @@ jobs:
   spm:
     runs-on: macOS-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
     - name: Build
       run: swift build
 
@@ -22,7 +22,7 @@ jobs:
             platform: [ios, tvos, macos, watchos]
       runs-on: macOS-latest
       steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Build
         # Some header files import C++ headers, which causes linting failures
         # (https://github.com/CocoaPods/CocoaPods/issues/5152). As a
