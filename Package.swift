@@ -1,4 +1,4 @@
-// swift-tools-version:5.0
+// swift-tools-version:5.3
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
@@ -50,6 +50,8 @@ let package = Package(
         "util/no_destructor_test.cc",
         "util/status_test.cc",
         "db/c_test.c",
+        "port/README.md",
+        "port/port_config.h.in",
       ],
       sources: [
         "db/",
@@ -58,6 +60,7 @@ let package = Package(
         "util/",
         "include/",
       ],
+      resources: [.process("Resources/PrivacyInfo.xcprivacy")],
       publicHeadersPath: "include",
       cSettings: [
         .define("LEVELDB_IS_BIG_ENDIAN", to: "0"),
