@@ -807,7 +807,7 @@ TEST(TableTest, ApproximateOffsetOfCompressed) {
   KVMap kvmap;
   Options options;
   options.block_size = 1024;
-  options.compression = kSnappyCompression;
+  options.compression = kNoCompression;
   c.Finish(options, &keys, &kvmap);
 
   // Expected upper and lower bounds of space used by compressible strings.

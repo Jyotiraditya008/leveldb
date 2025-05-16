@@ -94,34 +94,19 @@ Status ReadBlock(RandomAccessFile* file, const ReadOptions& options,
     }
   }
 
-  switch (data[n]) {
-    case kNoCompression:
-      if (data != buf) {
-        // File implementation gave us pointer to some other data.
-        // Use it directly under the assumption that it will be live
-        // while the file is open.
-        delete[] buf;
-        result->data = Slice(data, n);
-        result->heap_allocated = false;
-        result->cachable = false;  // Do not double-cache
-      } else {
-        result->data = Slice(buf, n);
-        result->heap_allocated = true;
-        result->cachable = true;
-      }
-
-      // Ok
-      break;
-      case kSnappyCompression: {
-        result->data = Slice(data, n);
-        result->heap_allocated = false;
-        result->cachable = true;
-        delete[] buf;
-        break;
-      }
-    default:
-      delete[] buf;
-      return Status::Corruption("bad block type");
+  // Always treat blocks as uncompressed
+  if (data != buf) {
+    // File implementation gave us pointer to some other data.
+    // Use it directly under the assumption that it will be live
+    // while the file is open.
+    delete[] buf;
+    result->data = Slice(data, n);
+    result->heap_allocated = false;
+    result->cachable = false;  // Do not double-cache
+  } else {
+    result->data = Slice(buf, n);
+    result->heap_allocated = true;
+    result->cachable = true;
   }
 
   return Status::OK();

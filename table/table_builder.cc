@@ -1,4 +1,4 @@
-    // Copyright (c) 2011 The LevelDB Authors. All rights reserved.
+// Copyright (c) 2011 The LevelDB Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file. See the AUTHORS file for names of contributors.
 
@@ -150,17 +150,8 @@ void TableBuilder::WriteBlock(BlockBuilder* block, BlockHandle* handle) {
   Slice block_contents;
   CompressionType type = r->options.compression;
   // TODO(postrelease): Support more compression options: zlib?
-    switch (type) {
-        case kNoCompression:
-            block_contents = raw;
-            break;
-            
-        case kSnappyCompression: {
-            block_contents = raw;
-            type = kNoCompression;
-            break;
-        }
-    }
+  block_contents = raw;
+  type = kNoCompression;
   WriteRawBlock(block_contents, type, handle);
   r->compressed_output.clear();
   block->Reset();
