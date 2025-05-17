@@ -2,7 +2,7 @@ Pod::Spec.new do |s|
   s.name         =  'leveldb-library'
   s.version      =  '1.22.6'
   s.license      =  'New BSD'
-  s.summary      =  'A fast key-value storage library '
+  s.summary      =  'A fast key-value storage library'
   s.description  =  'LevelDB is a fast key-value storage library written at Google that provides ' +
                     'an ordered mapping from string keys to string values.'
   s.homepage     =  'https://github.com/google/leveldb'
@@ -16,25 +16,20 @@ Pod::Spec.new do |s|
   s.watchos.deployment_target = '6.0'
 
   s.source       =  {
-    :git => 'https://github.com/firebase/leveldb.git',
-    :tag => 'CocoaPods-' + s.version.to_s
+    :git => 'https://github.com/Jyotiraditya008/leveldb.git',
+    :branch => 'fix-snappy-ios-base'
   }
 
   s.requires_arc = false
 
   s.pod_target_xcconfig = {
     'GCC_PREPROCESSOR_DEFINITIONS' => 'LEVELDB_IS_BIG_ENDIAN=0 ' +
-                                      'LEVELDB_PLATFORM_POSIX ' +
+                                      'LEVELDB_PLATFORM_POSIX=1 ' +
                                       'HAVE_FULLFSYNC=1',
-    'HEADER_SEARCH_PATHS' => '"${PODS_TARGET_SRCROOT}"',
-
-    # Disable warnings introduced by Xcode 8.3 and Xcode 9
-    # The deprecated-declarations is for OSMemoryBarrier on tvOS
+    'HEADER_SEARCH_PATHS' => '"${PODS_TARGET_SRCROOT}" "${PODS_TARGET_SRCROOT}/port" "${PODS_TARGET_SRCROOT}/include"',
     'WARNING_CFLAGS' => '-Wno-shorten-64-to-32 -Wno-comma -Wno-unreachable-code ' +
                         '-Wno-conditional-uninitialized -Wno-deprecated-declarations',
-
-    # Prevent naming conflicts between leveldb headers and system headers
-    'USE_HEADERMAP' => 'No',
+    'USE_HEADERMAP' => 'No'
   }
 
   s.header_dir = "leveldb"
@@ -58,10 +53,5 @@ Pod::Spec.new do |s|
     "util/testutil.cc"
   ]
 
-  s.resource_bundle = {
-    "#{s.module_name}_Privacy" => 'Resources/PrivacyInfo.xcprivacy'
-  }
-
   s.library = 'c++'
 end
-
